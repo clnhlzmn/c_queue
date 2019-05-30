@@ -1,4 +1,6 @@
-# A simple generic FIFO queue in C
+# A simple generic FIFO queue in C for microcontrollers
+
+Based on [Microcontrollers: Interrupt-safe ring buffers]
 
 ## features
 
@@ -7,7 +9,8 @@
 * no dynamic allocation
 * simple api (init, push, pop)
 * interrupt safe with the following conditions
-  * one producer thread and one consumer thread
+  * one processor core
+  * one producer thread and one consumer thread (e.g. interrupt pushes and main pops)
   * atomic read and write of `QUEUE_INDEX_T` (default is `volatile uint8_t`)
 
 ## example
@@ -45,3 +48,5 @@
             }
         }
     }
+    
+[Microcontrollers: Interrupt-safe ring buffers]: https://www.downtowndougbrown.com/2013/01/microcontrollers-interrupt-safe-ring-buffers/

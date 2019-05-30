@@ -31,7 +31,7 @@ queue_*_pop pops an item from the queue, returns 0 if successful, not 0 if fail
 
 #define QUEUE(name, type, count) \
 struct queue_##name { \
-    type storage[count]; \
+    volatile type storage[count]; \
     /*index of the read head, initialy 0*/ \
     QUEUE_INDEX_T read; \
     /*index of the write head, initialy 0*/ \
