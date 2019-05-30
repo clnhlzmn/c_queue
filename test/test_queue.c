@@ -4,6 +4,8 @@
 #include <assert.h>
 #include "queue.h"
 
+#undef QUEUE_INDEX_T
+#define QUEUE_INDEX_T int
 QUEUE(test, int, 2)
 
 int main() {

@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-
 /*
 A very simple circular buffer.
 
@@ -25,20 +24,25 @@ queue_*_push pushes an item onto the queue, returns 0 if successful, not 0 if fa
 queue_*_pop pops an item from the queue, returns 0 if successful, not 0 if fail
 
 */
+
+#ifndef QUEUE_INDEX_T
+#define QUEUE_INDEX_T volatile uint8_t
+#endif //QUEUE_INDEX_T
+
 #define QUEUE(name, type, count) \
 struct queue_##name { \
     type storage[count]; \
     /*index of the read head, initialy 0*/ \
-    size_t read; \
+    QUEUE_INDEX_T read; \
     /*index of the write head, initialy 0*/ \
-    size_t write; \
+    QUEUE_INDEX_T write; \
 }; \
 static inline void queue_##name##_init(struct queue_##name *q) { \
     q->read = 0; \
     q->write = 0; \
 } \
 static inline int queue_##name##_push(struct queue_##name *q, const type *item) { \
-    size_t next = (q->write + 1) % count; \
+    QUEUE_INDEX_T next = (q->write + 1) % count; \
     if (next != q->read) { \
         q->storage[next] = *item; \
         q->write = next; \
@@ -49,7 +53,7 @@ static inline int queue_##name##_push(struct queue_##name *q, const type *item) 
 } \
 static inline int queue_##name##_pop(struct queue_##name *q, type *item) { \
     if (q->read != q->write) { \
-        size_t next = (q->read + 1) % count; \
+        QUEUE_INDEX_T next = (q->read + 1) % count; \
         *item = q->storage[next]; \
         q->read = next; \
         return 0; \
