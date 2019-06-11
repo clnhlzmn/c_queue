@@ -1,17 +1,13 @@
 # A simple generic FIFO queue in C for microcontrollers
 
-Based on [Microcontrollers: Interrupt-safe ring buffers]
+Originally based on [Microcontrollers: Interrupt-safe ring buffers]. However, I have since modified the code such that it is not safe for interrupts, but it is more portable without any assumptions.
 
 ## features
 
 * works with elements of any type
-* overhead of only `2 * sizeof(QUEUE_INDEX_T) + sizeof(element_t)`
+* overhead of `3 * sizeof(size_t)`
 * no dynamic allocation
 * simple api (init, push, pop)
-* interrupt safe with the following conditions
-  * one processor core
-  * one producer thread and one consumer thread (e.g. interrupt pushes and main pops)
-  * atomic read and write of `QUEUE_INDEX_T` (default is `volatile uint8_t`)
 
 ## example
 
@@ -22,7 +18,7 @@ Based on [Microcontrollers: Interrupt-safe ring buffers]
     QUEUE(example, int, 8);
 
     //create an instance of queue_example
-    struct queue_example queue;
+    volatile struct queue_example queue;
 
     //analog to digital converter isr
     void adc_isr(void) {
@@ -38,13 +34,15 @@ Based on [Microcontrollers: Interrupt-safe ring buffers]
         //initialize the instance
         queue_example_init(&queue);
         while (1) {
-            int value;
-            if (queue_example_pop(&queue, &value) == 0) {
-                //one element removed and stored in value
-                printf("%d\r\n", value);
-            } else {
-                //queue empty
-                continue;
+            ATOMIC_BLOCK(ATOMIC_RESTORESTATE) { //atomic section for atmel avr
+                int value;
+                if (queue_example_pop(&queue, &value) == 0) {
+                    //one element removed and stored in value
+                    printf("%d\r\n", value);
+                } else {
+                    //queue empty
+                    continue;
+                }
             }
         }
     }
