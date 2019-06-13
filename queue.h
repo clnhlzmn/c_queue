@@ -53,7 +53,7 @@ static inline int queue_##name##_push(volatile struct queue_##name *q, const vol
 } \
 static inline int queue_##name##_pop(volatile struct queue_##name *q, volatile type *item) { \
     if (q->count > 0) { \
-        uint8_t next = (q->read + 1) % size; \
+        size_t next = (q->read + 1) % size; \
         *item = q->storage[next]; \
         q->read = next; \
         q->count--; \
