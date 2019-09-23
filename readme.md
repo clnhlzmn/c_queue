@@ -7,7 +7,7 @@ Originally based on [Microcontrollers: Interrupt-safe ring buffers]. However, I 
 * works with elements of any type
 * overhead of `3 * sizeof(size_t)`
 * no dynamic allocation
-* simple api (init, push, pop)
+* simple api `init`, `push`, `pop`
 
 ## example
 
