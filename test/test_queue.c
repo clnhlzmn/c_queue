@@ -14,20 +14,20 @@ int main() {
     queue_test_init(&q);
     //a value
     int val = -1;
-    assert(queue_test_pop(&q, &val) != 0 && "queue_test_pop should not return zero when queue is empty");
+    assert(queue_test_pop(&q, &val) != 0 && "queue_*_pop should not return zero when queue is empty");
     //check that we can insert COUNT items
     for (int i = 0; i < COUNT; ++i) {
-        assert(queue_test_push(&q, &i) == 0 && "queue_test_push should return zero when queue is not full");
+        assert(queue_test_push(&q, &i) == 0 && "queue_*_push should return zero when queue is not full");
     }
     //check that we can't push any more
-    assert(queue_test_push(&q, &val) != 0 && "queue_test_push should not return zero when queue is full");
+    assert(queue_test_push(&q, &val) != 0 && "queue_*_push should not return zero when queue is full");
     //check that we can remove the same COUNT items
     for (int i = 0; i < COUNT; ++i) {
         val = -1;
         assert(queue_test_pop(&q, &val) == 0 && "queue_*_pop should return zero when queue is not empty");
-        assert(val == i && "queue_test_pop popped incorrect value");
+        assert(val == i && "queue_*_pop popped incorrect value");
     }
     //check that we can't pop any more
-    assert(queue_test_pop(&q, &val) != 0 && "queue_test_pop should not return zero when queue is empty");
+    assert(queue_test_pop(&q, &val) != 0 && "queue_*_pop should not return zero when queue is empty");
     return 0;
 }
