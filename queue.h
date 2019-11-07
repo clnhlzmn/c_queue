@@ -68,6 +68,9 @@ static inline int queue_##name##_pop(volatile struct queue_##name *q,           
         return -1;                                                                      \
     }                                                                                   \
 }                                                                                       \
+static inline size_t queue_##name##_count(const volatile struct queue_##name *q) {      \
+    return q->count;                                                                    \
+}                                                                                       \
 static inline void queue_##name##_foreach(volatile struct queue_##name *q,              \
                                           int (*fun)(volatile type *, volatile void *), \
                                           volatile void *ctx) {                         \
